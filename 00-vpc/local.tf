@@ -1,0 +1,9 @@
+locals{
+    vpc_cidr=var.vpc_cidr
+    project_name=var.project_name
+    env=var.env_name
+    tags=var.user_tags
+    public_subnet=var.public_cidr
+    private_subnet=var.private_cidr
+    database_subnet=var.database_cidr
+}

@@ -1,0 +1,14 @@
+locals{
+    /*
+ security_group=data.aws_ssm_parameter.backend_lb_sg_id.value
+ */
+    source_security_group=data.aws_ssm_parameter.bastion_sg_id.value
+    ingress_alb_security_group=data.aws_ssm_parameter.ingress_alb_sg_id.value
+    vpn_security_group=data.aws_ssm_parameter.vpn_sg_id.value
+    mongodb_security_group=data.aws_ssm_parameter.mongodb_sg_id.value
+    redis_security_group=data.aws_ssm_parameter.redis_sg_id.value
+    rabbitmq_security_group=data.aws_ssm_parameter.rabbitmq_sg_id.value
+    mysql_security_group=data.aws_ssm_parameter.mysql_sg_id.value
+    eks_control_plane_security_group=data.aws_ssm_parameter.eks_control_plane_sg_id.value
+    eks_node_security_group=data.aws_ssm_parameter.eks_node_sg_id.value
+}
