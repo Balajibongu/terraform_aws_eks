@@ -8,13 +8,13 @@ module "vpc"{
     user_tags=local.tags
 
     #public subnets
-    public_subnet_cidr=local.public_cidr
+    public_subnet_cidr=local.public_subnet
 
     #private subnets
-    private_subnet_cidr=local.private_cidr
+    private_subnet_cidr=local.private_subnet
 
     #database subnets
-    database_subnet_cidr=local.database_cidr
+    database_subnet_cidr=local.database_subnet
 }
 
 /*
