@@ -3,7 +3,7 @@ module "eks" {
   version = "~> 21.0"
 
   name               = "roboshop-dev"
-  kubernetes_version = "1.33"
+  kubernetes_version = "1.32"
 
   addons = {
     coredns                = {}
