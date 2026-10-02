@@ -244,7 +244,7 @@ resource "aws_security_group_rule" "laptop_bastion" {
   protocol                 = "tcp"
 
   security_group_id        = local.source_security_group
-  source_security_group_id = ["0.0.0.0/0"]
+  cidr_blocks               = ["0.0.0.0/0"]
 }
 resource "aws_security_group_rule" "bastion_redis" {
   type                     = "ingress"
@@ -354,7 +354,7 @@ resource "aws_security_group_rule" "eks-node-to-eks-node" {
   to_port                  = 0
   protocol                 = "-1"
   security_group_id        = local.eks_node_security_group
-  source_security_group_id = ["10.0.0.0/16"]
+  cidr_blocks               = ["10.0.0.0/16"]
 }
 
 resource "aws_security_group_rule" "bastion-to-eks-node" {
