@@ -43,13 +43,13 @@ module "eks" {
       min_size     = 2
       max_size     = 10
       desired_size = 2
-      taints = {
-        upgrade = {
-          key = "upgrade"
-          value = "true"
-          effect = "NO_SCHEDULE"
-        }
-      }
+      # taints = {
+      #   upgrade = {
+      #     key = "upgrade"
+      #     value = "true"
+      #     effect = "NO_SCHEDULE"
+      #   }
+      # }
       labels = {
         nodegroup = "blue"
       }
@@ -65,11 +65,17 @@ module "eks" {
       min_size     = 2
       max_size     = 10
       desired_size = 2
+      taints = {
+        upgrade = {
+          key = "upgrade"
+          value = "true"
+          effect = "NO_SCHEDULE"
+        }
+      }
       labels = {
-        nodegroup = "blue"
+        nodegroup = "green"
       }
   }
-
-  tags = local.common_tags
 }
+  tags = local.common_tags
 }
