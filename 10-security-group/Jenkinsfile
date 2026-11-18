@@ -36,11 +36,6 @@ pipeline{
                 }
             }
         }
-        stage("approve"){
-            steps {
-                input message: "Confirm Terraform ${params.ACTION}?", ok: 'Proceed'
-            }
-        }
         stage("terraform apply"){
             steps{
                 script{

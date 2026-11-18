@@ -36,11 +36,6 @@ pipeline{
                 }
             }
         }
-        stage("approve"){
-            steps {
-                input message: "Confirm Terraform ${params.ACTION}?", ok: 'Proceed'
-            }
-        }
         stage("terraform apply"){
             steps{
                 script{
@@ -50,6 +45,15 @@ pipeline{
                             terraform apply -auto-approve
                         """
                     }
+                }
+            }
+        }
+        stage("trigger security group"){
+            steps{
+                script{
+                    build job: 10-security-group
+                    wait: false
+                    propagate: false
                 }
             }
         }
