@@ -17,7 +17,7 @@ pipeline{
         stage("terraform init"){
             steps{
                 withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
-                    sh 'terraform init -input=false'
+                    sh 'terraform init'
                 }
             }
         }
@@ -26,10 +26,10 @@ pipeline{
                 script{
                     withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
                         if(params.ACTION == 'destroy'){
-                        sh 'terraform plan -destroy -input=false'
+                            sh 'exit 1'
                         }
                         else{
-                            sh 'terraform plan -input=false'
+                            sh 'terraform plan'
                         }
                     }
                 }
@@ -43,7 +43,7 @@ pipeline{
         stage("terraform apply"){
             steps{
                 withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
-                    sh 'terraform apply -input=false'
+                    sh 'terraform apply'
                 }
             }
         }
