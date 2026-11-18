@@ -51,8 +51,8 @@ pipeline{
         stage("trigger sg-rules"){
             steps{
                 script{
-                    build job: "30-sg-rules"
-                    wait : false
+                    build job: "30-sg-rules",
+                    wait : false,
                     propagate : false
                 }
             }

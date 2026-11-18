@@ -57,8 +57,8 @@ pipeline{
             stage("bastion"){
                 steps{
                     script{
-                        build job: "20-baston-host"
-                        wait : false
+                        build job: "20-baston-host",
+                        wait : false,
                         propagate : false
                     }
                 }
@@ -66,8 +66,8 @@ pipeline{
             stage("ecr"){
                 steps{
                     script{
-                        build job: "60-ecr"
-                        wait : false
+                        build job: "60-ecr",
+                        wait : false,
                         propagate : false
                     }
                 }
@@ -75,8 +75,8 @@ pipeline{
             stage("acm"){
                 steps{
                     script{
-                        build job: "70-acm"
-                        wait : false
+                        build job: "70-acm",
+                        wait : false,
                         propagate : false
                     }
                 }
@@ -84,8 +84,8 @@ pipeline{
             stage("frontend-lb"){
                 steps{
                     script{
-                        build job: "80-frontend-alb"
-                        wait : false
+                        build job: "80-frontend-alb",
+                        wait : false,
                         propagate : false
                     }
                 }
@@ -93,8 +93,8 @@ pipeline{
             stage("eks-cluster"){
                 steps{
                     script{
-                        build job: "90-eks-cluster"
-                        wait : false
+                        build job: "90-eks-cluster",
+                        wait : false,
                         propagate : false
                     }
                 }
