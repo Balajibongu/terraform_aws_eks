@@ -15,14 +15,22 @@ pipeline{
     } 
     stages{
         stage("terraform init"){
-            sh 'terraform init -input=false'
+            steps{
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                    sh 'terraform init -input=false'
+                }
+            }
         }
         stage("terraform plan"){
-            if(params.ACTION == 'destroy'){
+            steps{
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                if(params.ACTION == 'destroy'){
                 sh 'terraform plan -destroy -input=false'
-            }
-            else{
-                sh 'terraform plan -input=false'
+                }
+                else{
+                    sh 'terraform plan -input=false'
+                }
+                }
             }
         }
         stage("approve"){
@@ -31,7 +39,11 @@ pipeline{
             }
         }
         stage("terraform apply"){
-            sh 'terraform apply -input=false'
+            steps{
+                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                    sh 'terraform apply -input=false'
+                }
+            }
         }
     }
 
