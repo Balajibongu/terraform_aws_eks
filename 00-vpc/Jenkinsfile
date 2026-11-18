@@ -23,13 +23,15 @@ pipeline{
         }
         stage("terraform plan"){
             steps{
-                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
-                if(params.ACTION == 'destroy'){
-                sh 'terraform plan -destroy -input=false'
-                }
-                else{
-                    sh 'terraform plan -input=false'
-                }
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        if(params.ACTION == 'destroy'){
+                        sh 'terraform plan -destroy -input=false'
+                        }
+                        else{
+                            sh 'terraform plan -input=false'
+                        }
+                    }
                 }
             }
         }
