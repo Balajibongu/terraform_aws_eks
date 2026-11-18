@@ -6,9 +6,6 @@ pipeline{
     environment{
         name = "balaji"
     }
-    parameters {
-        choice(name: 'ACTION', choices: ['apply', 'destroy'], description: 'Select Terraform action')
-    }
     options{
         timeout(time: 60, unit: 'MINUTES')
         disableConcurrentBuilds() 

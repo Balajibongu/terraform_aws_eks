@@ -1,0 +1,65 @@
+pipeline{
+    // agent any 
+    agent{
+        label "AGENT-1"
+    }
+    environment{
+        name = "balaji"
+    }
+    options{
+        timeout(time: 60, unit: 'MINUTES')
+        disableConcurrentBuilds() 
+        ansiColor('xterm')
+    } 
+    stages{
+        stage("terraform init"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh"""
+                            cd 90-eks-cluster
+                            terraform init
+                        """
+                    }
+                }
+            }
+        }
+        stage("terraform plan"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh """
+                            cd 90-eks-cluster
+                            terraform plan
+                        """
+                    }
+                }
+            }
+        }
+        stage("approve"){
+            steps {
+                input message: "Confirm Terraform ${params.ACTION}?", ok: 'Proceed'
+            }
+        }
+        stage("terraform apply"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh """
+                            cd 90-eks-cluster
+                            terraform apply -auto-approve
+                        """
+                    }
+                }
+            }
+        }
+        
+    }
+
+    post{
+        always{
+            echo "cleaning work space"
+            cleanWs()
+        }   
+    }
+}

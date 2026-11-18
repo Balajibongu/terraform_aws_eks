@@ -1,0 +1,111 @@
+pipeline{
+    // agent any 
+    agent{
+        label "AGENT-1"
+    }
+    environment{
+        name = "balaji"
+    }
+    options{
+        timeout(time: 60, unit: 'MINUTES')
+        disableConcurrentBuilds() 
+        ansiColor('xterm')
+    } 
+    stages{
+        stage("terraform init"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh"""
+                            cd 30-sg-rules
+                            terraform init
+                        """
+                    }
+                }
+            }
+        }
+        stage("terraform plan"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh """
+                            cd 30-sg-rules
+                            terraform plan
+                        """
+                    }
+                }
+            }
+        }
+        stage("approve"){
+            steps {
+                input message: "Confirm Terraform ${params.ACTION}?", ok: 'Proceed'
+            }
+        }
+        stage("terraform apply"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh """
+                            cd 30-sg-rules
+                            terraform apply -auto-approve
+                        """
+                    }
+                }
+            }
+        }
+        stage("trigger"){
+            stage("bastion"){
+                steps{
+                    script{
+                        build job: "20-baston-host"
+                        wait : false
+                        propagate : false
+                    }
+                }
+            }
+            stage("ecr"){
+                steps{
+                    script{
+                        build job: "60-ecr"
+                        wait : false
+                        propagate : false
+                    }
+                }
+            }
+            stage("acm"){
+                steps{
+                    script{
+                        build job: "70-acm"
+                        wait : false
+                        propagate : false
+                    }
+                }
+            }
+            stage("frontend-lb"){
+                steps{
+                    script{
+                        build job: "80-frontend-alb"
+                        wait : false
+                        propagate : false
+                    }
+                }
+            }
+            stage("eks-cluster"){
+                steps{
+                    script{
+                        build job: "90-eks-cluster"
+                        wait : false
+                        propagate : false
+                    }
+                }
+            }
+        }
+    }
+
+    post{
+        always{
+            echo "cleaning work space"
+            cleanWs()
+        }   
+    }
+}

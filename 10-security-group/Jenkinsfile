@@ -1,0 +1,73 @@
+pipeline{
+    // agent any 
+    agent{
+        label "AGENT-1"
+    }
+    environment{
+        name = "balaji"
+    }
+    options{
+        timeout(time: 60, unit: 'MINUTES')
+        disableConcurrentBuilds() 
+        ansiColor('xterm')
+    } 
+    stages{
+        stage("terraform init"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh"""
+                            cd 10-security-group
+                            terraform init
+                        """
+                    }
+                }
+            }
+        }
+        stage("terraform plan"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh """
+                            cd 10-security-group
+                            terraform plan
+                        """
+                    }
+                }
+            }
+        }
+        stage("approve"){
+            steps {
+                input message: "Confirm Terraform ${params.ACTION}?", ok: 'Proceed'
+            }
+        }
+        stage("terraform apply"){
+            steps{
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh """
+                            cd 10-security-group
+                            terraform apply -auto-approve
+                        """
+                    }
+                }
+            }
+        }
+        stage("trigger sg-rules"){
+            steps{
+                script{
+                    build job: "30-sg-rules"
+                    wait : false
+                    propagate : false
+                }
+            }
+        }
+    }
+
+    post{
+        always{
+            echo "cleaning work space"
+            cleanWs()
+        }   
+    }
+}
