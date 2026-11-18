@@ -12,12 +12,18 @@ pipeline{
     options{
         timeout(time: 60, unit: 'MINUTES')
         disableConcurrentBuilds() 
+        ansiColor('xterm')
     } 
     stages{
         stage("terraform init"){
             steps{
-                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
-                    sh 'terraform init'
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh"""
+                            cd 00-vpc
+                            terraform init
+                        """
+                    }
                 }
             }
         }
@@ -25,12 +31,10 @@ pipeline{
             steps{
                 script{
                     withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
-                        if(params.ACTION == 'destroy'){
-                            sh 'exit 1'
-                        }
-                        else{
-                            sh 'terraform plan'
-                        }
+                        sh """
+                            cd 00-vpc
+                            terraform plan
+                        """
                     }
                 }
             }
@@ -42,8 +46,13 @@ pipeline{
         }
         stage("terraform apply"){
             steps{
-                withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
-                    sh 'terraform apply'
+                script{
+                    withAWS(credentials: 'aws-credentials', region: 'us-east-1'){
+                        sh """
+                            cd 00-vpc
+                            terraform apply -auto-approve
+                        """
+                    }
                 }
             }
         }
