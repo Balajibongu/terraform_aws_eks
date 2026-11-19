@@ -53,49 +53,57 @@ pipeline{
                 }
             }
         }
-        stage("trigger"){
-            stage("bastion"){
-                steps{
-                    script{
-                        build job: "20-baston-host",
-                        wait : false,
-                        propagate : false
+        
+        stage("trigger") {
+            stages {
+
+                stage("bastion") {
+                    steps {
+                        script {
+                            build job: "20-bastion-host",
+                                wait: false,
+                                propagate: false
+                        }
                     }
                 }
-            }
-            stage("ecr"){
-                steps{
-                    script{
-                        build job: "60-ecr",
-                        wait : false,
-                        propagate : false
+
+                stage("ecr") {
+                    steps {
+                        script {
+                            build job: "60-ecr",
+                                wait: false,
+                                propagate: false
+                        }
                     }
                 }
-            }
-            stage("acm"){
-                steps{
-                    script{
-                        build job: "70-acm",
-                        wait : false,
-                        propagate : false
+
+                stage("acm") {
+                    steps {
+                        script {
+                            build job: "70-acm",
+                                wait: false,
+                                propagate: false
+                        }
                     }
                 }
-            }
-            stage("frontend-lb"){
-                steps{
-                    script{
-                        build job: "80-frontend-alb",
-                        wait : false,
-                        propagate : false
+
+                stage("frontend-lb") {
+                    steps {
+                        script {
+                            build job: "80-frontend-alb",
+                                wait: false,
+                                propagate: false
+                        }
                     }
                 }
-            }
-            stage("eks-cluster"){
-                steps{
-                    script{
-                        build job: "90-eks-cluster",
-                        wait : false,
-                        propagate : false
+
+                stage("eks-cluster") {
+                    steps {
+                        script {
+                            build job: "90-eks-cluster",
+                                wait: false,
+                                propagate: false
+                        }
                     }
                 }
             }
