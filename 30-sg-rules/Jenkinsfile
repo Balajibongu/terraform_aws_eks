@@ -60,7 +60,7 @@ pipeline{
                 stage("bastion") {
                     steps {
                         script {
-                            build job: "20-bastion-host",
+                            build job: "20-baston-host",
                                 wait: false,
                                 propagate: false
                         }
