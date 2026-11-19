@@ -1,5 +1,5 @@
 variable "image" {
-   
+   default = "catalogue"
 }
 
 variable "project" {
