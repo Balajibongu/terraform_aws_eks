@@ -76,6 +76,6 @@ module "eks" {
 #         nodegroup = "green"
 #       }
 #   }
-# }
+}
   tags = local.common_tags
 }
