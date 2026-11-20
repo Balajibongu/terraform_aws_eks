@@ -53,6 +53,15 @@ pipeline{
                 }
             }
         }
+        stage("frontend-lb") {
+                    steps {
+                        script {
+                            build job: "80-frontend-alb",
+                                wait: false,
+                                propagate: false
+                        }
+                    }
+        }
         
     }
 
